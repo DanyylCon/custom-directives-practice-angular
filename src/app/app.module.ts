@@ -3,10 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NumbersOnlyDirective } from './numbers-only.directive';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NumbersOnlyDirective
   ],
   imports: [
     BrowserModule,
