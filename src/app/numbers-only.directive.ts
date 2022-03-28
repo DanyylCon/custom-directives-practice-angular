@@ -19,7 +19,7 @@ export class NumbersOnlyDirective {
     'Copy',
     'Paste',
   ];
-  
+
   constructor() { }
 
   @HostListener('keydown', ['$event'])
@@ -42,6 +42,15 @@ export class NumbersOnlyDirective {
       if (e.key === ' ' || isNaN(Number(e.key))) {
         e.preventDefault();
       }
-    }
+  }
+
+  @HostListener('paste', ['$event'])
+    onPaste(event: ClipboardEvent) {
+      event.preventDefault();
+      const pastedInput: string = (event.clipboardData as DataTransfer)
+        .getData('text/plain')
+        .replace(/\D/g, ''); // get a digit-only string
+      document.execCommand('insertText', false, pastedInput);
+  }
 
 }
