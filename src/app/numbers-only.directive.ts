@@ -1,10 +1,11 @@
-import { Directive, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener } from '@angular/core';
 
 @Directive({
   selector: '[appNumbersOnly]'
 })
 export class NumbersOnlyDirective {
 
+  inputElement: HTMLInputElement;
   private navigationKeys = [
     'Backspace',
     'Delete',
@@ -20,7 +21,9 @@ export class NumbersOnlyDirective {
     'Paste',
   ];
 
-  constructor() { }
+  constructor(public el: ElementRef) { 
+    this.inputElement = el.nativeElement;
+  }
 
   @HostListener('keydown', ['$event'])
     onKeyDown(e: KeyboardEvent) {
@@ -52,5 +55,15 @@ export class NumbersOnlyDirective {
         .replace(/\D/g, ''); // get a digit-only string
       document.execCommand('insertText', false, pastedInput);
   }
+
+  @HostListener('drop', ['$event'])
+    onDrop(event: DragEvent) {
+      event.preventDefault();
+      const textData = (event.dataTransfer as DataTransfer)
+        .getData('text').replace(/\D/g, '');
+      this.inputElement.focus();
+      document.execCommand('insertText', false, textData);
+}
+
 
 }
